@@ -7,10 +7,11 @@ import {
 } from "@ant-design/icons";
 
 import { integralCF } from "@/font/Font";
+import Image from "next/image";
 const Footer: React.FC = () => {
   return (
-    <footer className="border-t border-gray-200 py-8 px-4 md:px-6 lg:px-8 bg-gray-50">
-      <div className="container mx-auto">
+    <footer className="border-t border-gray-200 py-8 px-4 md:px-6 lg:px-8 bg-gray-50 ">
+      <div className="container2 mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           <div className="col-span-1 lg:col-span-1">
             <h2 className={`${integralCF.className}  text-2xl font-bold mb-4`}>
@@ -159,30 +160,40 @@ const Footer: React.FC = () => {
           </p>
 
           <div className="flex items-center space-x-3 max-[568px]:flex-wrap">
-            <img
-              src={"/visa.svg"}
+            <Image
+              src="/visa.svg"
               alt="Visa"
-              className="w-[100px] cursor-pointer h-[100px] max-[400px]:!w-auto max-[400px]:h-auto "
+              width={100}
+              height={100}
+              className="cursor-pointer max-[400px]:!w-auto max-[400px]:h-auto"
             />
-            <img
+            <Image
               src="/mastercard.svg"
               alt="Mastercard"
-              className=" w-[100px] cursor-pointer h-[100px] max-[400px]:!w-auto max-[400px]:h-auto"
+              width={100}
+              height={100}
+              className="cursor-pointer max-[400px]:!w-auto max-[400px]:h-auto"
             />
-            <img
+            <Image
               src="/paypal.svg"
               alt="PayPal"
-              className=" w-[100px] cursor-pointer h-[100px] max-[400px]:!w-auto max-[400px]:h-auto"
+              width={100}
+              height={100}
+              className="cursor-pointer max-[400px]:!w-auto max-[400px]:h-auto"
             />
-            <img
+            <Image
               src="/apple.svg"
               alt="Apple Pay"
-              className=" w-[100px] cursor-pointer h-[100px] max-[400px]:!w-auto max-[400px]:h-auto"
+              width={100}
+              height={100}
+              className="cursor-pointer max-[400px]:!w-auto max-[400px]:h-auto"
             />
-            <img
+            <Image
               src="/google.svg"
               alt="Google Pay"
-              className=" w-[100px] cursor-pointer h-[100px] max-[400px]:!w-auto max-[400px]:h-auto"
+              width={100}
+              height={100}
+              className="cursor-pointer max-[400px]:!w-auto max-[400px]:h-auto"
             />
           </div>
         </div>

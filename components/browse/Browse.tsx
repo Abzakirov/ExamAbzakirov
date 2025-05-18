@@ -1,4 +1,5 @@
 import { integralCF } from "@/font/Font";
+import Image from "next/image";
 import React from "react";
 
 const categories = [{ image: "/casual.png" }, { image: "/formal.jpg" }];
@@ -17,9 +18,12 @@ const DressStyleGrid = () => {
               key={category.image}
               className="relative group cursor-pointer transition-transform transform hover:scale-105"
             >
-              <img
+              <Image
                 src={category.image}
-                className="rounded-lg w-full h-60 object-cover"
+                alt=""
+                className="rounded-lg object-cover"
+                width={300}
+                height={240}
               />
             </div>
           ))}
@@ -30,9 +34,12 @@ const DressStyleGrid = () => {
               key={category.image}
               className="relative group cursor-pointer transition-transform transform hover:scale-105"
             >
-              <img
+              <Image
                 src={category.image}
-                className="rounded-lg w-full h-60 object-cover"
+                alt=""
+                className="rounded-lg object-cover"
+                width={300}
+                height={240}
               />
             </div>
           ))}

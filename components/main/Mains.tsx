@@ -3,6 +3,7 @@ import ShowCase from "../showcase/ShowCase";
 import NewArrivals from "../newArrivals/NewArrivals";
 import TopSelling from "../topSelling/TopSelling";
 import DressStyleGrid from "../browse/Browse";
+import Customers from "../customers/Customers";
 
 const Mains = () => {
   return (
@@ -11,6 +12,7 @@ const Mains = () => {
       <NewArrivals />
       <TopSelling />
       <DressStyleGrid />
+      <Customers />
     </div>
   );
 };

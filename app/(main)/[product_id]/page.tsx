@@ -1,6 +1,5 @@
 import { axiosInstance } from "@/hooks/useAxios";
-import { ProductInfoType, ProductType } from "@/@types";
-import Rates from "@/generics/rate/Rate";
+import { ProductInfoType } from "@/@types";
 import ProductInfoComponent from "@/components/productInfoComponent/ProductInfoComponent";
 
 const ProductInfo = async ({

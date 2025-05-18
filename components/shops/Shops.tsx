@@ -1,116 +1,216 @@
 "use client";
-import { ProductInfoType } from "@/@types";
+import { ProductType, RootState } from "@/@types";
 import { integralCF } from "@/font/Font";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { ArrowRight, Trash2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import {
+  removeProduct,
+  updateQuantity,
+} from "@/store/productSlice/ProductSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Shops = () => {
-  const [product, setProduct] = useState<ProductInfoType | null>(null);
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.products.items);
 
-  useEffect(() => {
-    const storedProduct = JSON.parse(localStorage.getItem("cart") || "null");
-    setProduct(storedProduct);
-  }, []);
+  const handleRemoveItem = (productId: string) => {
+    dispatch(removeProduct(productId));
+  };
 
-  if (!product) return <div className="container2 mt-4">Корзина пуста</div>;
+  const increaseQuantity = (productId: string) => {
+    const product = cartItems.find((item) => item.id === productId);
+    if (product) {
+      dispatch(
+        updateQuantity({
+          id: productId,
+          quantity: (product.quantity || 1) + 1,
+        })
+      );
+    }
+  };
+
+  const decreaseQuantity = (productId: string) => {
+    const product = cartItems.find((item) => item.id === productId);
+    if (product && (product.quantity || 1) > 1) {
+      dispatch(
+        updateQuantity({
+          id: productId,
+          quantity: (product.quantity || 1) - 1,
+        })
+      );
+    } else {
+      handleRemoveItem(productId);
+    }
+  };
+
+  // Расчет общей суммы
+  const calculateSubtotal = () => {
+    return cartItems.reduce((total, item) => {
+      return total + item.price * (item.quantity || 1);
+    }, 0);
+  };
+
+  const subtotal = calculateSubtotal();
+  const discount = subtotal * 0.2; 
+  const deliveryFee = 15;
+  const total = subtotal - discount + deliveryFee;
+
+  if (cartItems.length === 0)
+    return <div className="container2 mt-4 px-2 text-center">Корзина пуста</div>;
 
   return (
-    <div className="container2 mt-4">
+    <div className="container2 mt-4 px-2">
       <div>
         <h1
-          className={` ${integralCF.className} text-[40px] font-black max-[500px]:text-[23px]`}
+          className={`${integralCF.className} text-[40px] font-black max-[500px]:text-[23px] max-[300px]:text-[20px] text-center sm:text-left`}
         >
           Your cart
         </h1>
-        <div className="mt-4 flex items-center gap-4">
-          <div className="w-[735px] p-[20px] flex gap-4 bg-white rounded-lg shadow-md relative">
-            <button className="absolute top-5 right-7">
-              <Trash2 size={24} className="text-[red]" />
-            </button>
-            <div className="flex gap-4">
-              <div>
-                <img src={product.img} alt="" className="w-[200px] h-[200px]" />
-              </div>
-              <div className="flex flex-col gap-2 items-start">
-                <h2 className="text-[20px] font-bold">{product.name}</h2>
-                <div className="flex items-center gap-2">
-                  <h2 className="text-[18px] font-medium text-[#000]">Size:</h2>
-                  <p className="text-rgba(0, 0, 0, 0.60) text-[14px]">
-                    {product.size}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <h2 className="text-[18px] font-medium text-[#000]">
-                    Colors:
-                  </h2>
-                  <p className="text-rgba(0, 0, 0, 0.60) text-[14px]">
-                    {product.color}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <p className="text-rgba(0, 0, 0, 0.60) text-[20px] font-bold">
-                    ${product.price}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center w-[130px] h-[44px] justify-center text-center gap-4 bg-[#F0F0F0] rounded-[62px] absolute bottom-5 right-7">
-                <button>
-                  <MinusOutlined size={24} className="!font-medium" />
+        <div className="flex flex-col lg:flex-row gap-5 items-center">
+          <div className="mt-4 flex flex-col gap-4 w-full lg:w-auto">
+            {cartItems.map((product: ProductType) => (
+              <div
+                key={product.id}
+                className="w-full md:w-[735px] max-[300px]:w-full p-[20px] max-[300px]:p-[10px] flex gap-4 bg-white rounded-lg shadow-md relative"
+              >
+                <button
+                  className="absolute top-2 right-2 sm:top-5 sm:right-7"
+                  onClick={() => handleRemoveItem(product.id)}
+                >
+                  <Trash2 size={20} className="text-[red]" />
                 </button>
-                <span className="!text-[16px] !font-medium">1</span>
-                <button>
-                  <PlusOutlined size={24} className="!font-bold" />
-                </button>
+                <div className="flex flex-col sm:flex-row gap-4 w-full">
+                  <div className="flex justify-center">
+                    <Image
+                      src={product.img}
+                      alt={product.name}
+                      width={200}
+                      height={200}
+                      className="w-[80px] sm:w-[120px] md:w-[200px] h-[80px] sm:h-[120px] md:h-[200px] object-contain"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2 items-start">
+                    <h2 className="text-[16px] sm:text-[18px] md:text-[20px] font-bold max-w-[200px] sm:max-w-none truncate">
+                      {product.name}
+                    </h2>
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-[14px] sm:text-[16px] md:text-[18px] font-medium text-[#000]">
+                        Price:
+                      </h2>
+                      <p className="text-rgba(0, 0, 0, 0.60) text-[12px] sm:text-[14px]">
+                        ${product.currentPrice || product.price}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-[14px] sm:text-[16px] md:text-[18px] font-medium text-[#000]">
+                        Rate:
+                      </h2>
+                      <p className="text-rgba(0, 0, 0, 0.60) text-[12px] sm:text-[14px]">
+                        {product.rate}/5
+                      </p>
+                    </div>
+                    {product.selectedSize && (
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-[14px] sm:text-[16px] md:text-[18px] font-medium text-[#000]">
+                          Size:
+                        </h2>
+                        <p className="text-rgba(0, 0, 0, 0.60) text-[12px] sm:text-[14px]">
+                          {product.selectedSize}
+                        </p>
+                      </div>
+                    )}
+                    {product.selectedColor && (
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-[14px] sm:text-[16px] md:text-[18px] font-medium text-[#000]">
+                          Color:
+                        </h2>
+                        <div
+                          className="w-3 h-3 sm:w-4 sm:h-4 rounded-full"
+                          style={{ backgroundColor: product.selectedColor }}
+                        ></div>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2">
+                      <p className="text-rgba(0, 0, 0, 0.60) text-[14px] sm:text-[16px] md:text-[20px] font-bold">
+                        ${product.price}
+                      </p>
+                      {product.discount > 0 && (
+                        <span className="text-[red] text-[10px] sm:text-[12px] md:text-[14px]">
+                          -{product.discount}%
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center w-[110px] max-[300px]:w-[90px] h-[36px] sm:h-[44px] max-[300px]:text-[12px] justify-center text-center gap-2 sm:gap-4 bg-[#F0F0F0] rounded-[62px] sm:absolute static sm:bottom-5 sm:right-7 mt-4 sm:mt-0 mx-auto sm:mx-0">
+                    <button onClick={() => decreaseQuantity(product.id)}>
+                      <MinusOutlined size={16} className="!font-medium" />
+                    </button>
+                    <span className="!text-[14px] sm:!text-[16px] !font-medium">
+                      {product.quantity || 1}
+                    </span>
+                    <button onClick={() => increaseQuantity(product.id)}>
+                      <PlusOutlined size={16} className="!font-bold" />
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-          <div className="w-[505px] p-[20px] flex flex-col gap-4 bg-white rounded-lg shadow-md relative">
-            <h1 className="text-[24px] font-bold">Order Summary</h1>
+          <div className="w-full md:w-[505px] p-[20px] max-[300px]:p-[15px] flex flex-col gap-4 bg-white rounded-lg shadow-md relative mt-4 lg:mt-0">
+            <h1 className="text-[20px] sm:text-[24px] font-bold">Order Summary</h1>
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
-                <h4 className="text-rgba(0, 0, 0, 0.60) text-[20px]">
+                <h4 className="text-rgba(0, 0, 0, 0.60) text-[16px] sm:text-[20px]">
                   Subtotal:
                 </h4>
-                <h2 className="text-[#000] text-[20px] font-extrabold">$565</h2>
+                <h2 className="text-[#000] text-[16px] sm:text-[20px] font-extrabold">
+                  ${subtotal.toFixed(2)}
+                </h2>
               </div>{" "}
               <div className="flex items-center justify-between">
-                <h4 className="text-rgba(0, 0, 0, 0.60) text-[20px]">
+                <h4 className="text-rgba(0, 0, 0, 0.60) text-[16px] sm:text-[20px]">
                   Discount (-20%):
                 </h4>
-                <h2 className="text-[red] text-[20px] font-extrabold">-$113</h2>
+                <h2 className="text-[red] text-[16px] sm:text-[20px] font-extrabold">
+                  -${discount.toFixed(2)}
+                </h2>
               </div>{" "}
               <div className="flex items-center justify-between">
-                <h4 className="text-rgba(0, 0, 0, 0.60) text-[20px]">
+                <h4 className="text-rgba(0, 0, 0, 0.60) text-[16px] sm:text-[20px]">
                   Delivery Fee:
                 </h4>
-                <h2 className="text-[#000] text-[20px] font-extrabold">$15</h2>
+                <h2 className="text-[#000] text-[16px] sm:text-[20px] font-extrabold">
+                  ${deliveryFee.toFixed(2)}
+                </h2>
               </div>
               <div className="flex items-center justify-between mt-3">
-                <h4 className="text-rgba(0, 0, 0, 0.60) text-[20px]">Total</h4>
-                <h2 className="text-[#000] text-[20px] font-extrabold">$467</h2>
+                <h4 className="text-rgba(0, 0, 0, 0.60) text-[16px] sm:text-[20px]">Total</h4>
+                <h2 className="text-[#000] text-[16px] sm:text-[20px] font-extrabold">
+                  ${total.toFixed(2)}
+                </h2>
               </div>
             </div>
             <div>
-              <div className="flex items-center gap-4">
-                <form className="flex items-center gap-4 h-[48px] rounded-[62px] w-[330px] bg-[#F0F0F0] p-2">
-                  <img src="/del.svg" alt="w" />
+              <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
+                <form className="flex items-center gap-2 sm:gap-4 h-[40px] sm:h-[48px] rounded-[62px] w-full md:w-[330px] bg-[#F0F0F0] p-2">
+                  <Image src="/del.svg" alt="w" width={20} height={20} className="w-5 h-5 sm:w-auto sm:h-auto" />
                   <input
                     type="text"
                     placeholder="Add promo code"
-                    className=" w-full h-full outline-none  font-medium"
+                    className="w-full h-full outline-none font-medium bg-transparent text-[14px] sm:text-[16px]"
                   />
                 </form>
-                <Button className="!text-[#fff] !rounded-full !bg-[#000] !p-[16px] !w-[119px] !h-[48px]">
+                <Button className="!text-[#fff] !rounded-full !bg-[#000] !p-[12px] sm:!p-[16px] !w-[100px] sm:!w-[119px] !h-[40px] sm:!h-[48px] !text-[14px] sm:!text-[16px]">
                   Apply
                 </Button>
               </div>
               <Button
                 type="text"
-                className="!w-[457px] !h-[60px] !bg-[#000] !text-white flex items-center gap-2 mt-4 !rounded-full"
+                className="!w-full md:!w-[457px] !h-[50px] sm:!h-[40px] !bg-[#000] !max-[320px]:h-[30px] !text-white flex items-center justify-center gap-2 mt-4 !rounded-full !text-[14px] sm:!text-[16px]"
               >
-                Go to Checkout <ArrowRight />
+                Go to Checkout <ArrowRight size={16} className="sm:w-5 sm:h-5" />
               </Button>
             </div>
           </div>

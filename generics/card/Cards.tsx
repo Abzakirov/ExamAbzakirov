@@ -6,15 +6,14 @@ import { showErrorToast, showSuccessToast } from "../toast/Toast";
 import Rates from "../rate/Rate";
 import Link from "next/link";
 
-// Import Swiper components and required modules
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { ProductType } from "@/@types";
+import ImageTitleSkeleton from "../sceletton/Sceletton";
 
 const Cards = () => {
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -28,8 +27,7 @@ const Cards = () => {
         const response = await axiosInstance.get("/Zustand");
         setProducts(response.data || []);
         setLoading(false);
-        showSuccessToast("Malumotlar muvafaqiyatli keldi!");
-      } catch (error: Error|any) {
+      } catch (error: Error | any) {
         showErrorToast(error?.message || "Malumotlar yuklanishda xatolik");
         setError(error);
         setLoading(false);
@@ -39,7 +37,7 @@ const Cards = () => {
     fetchProducts();
   }, []);
 
-  if (loading) return <div>Loading products...</div>;
+  if (loading) return <ImageTitleSkeleton />;
 
   return (
     <div className="container2 mx-auto px-4 mt-7">
@@ -48,8 +46,6 @@ const Cards = () => {
           modules={[Navigation, Pagination, Autoplay]}
           spaceBetween={10}
           slidesPerView={4}
-          navigation
-          pagination={{ clickable: true }}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
           className="mySwiper"
           breakpoints={{
@@ -75,7 +71,7 @@ const Cards = () => {
             <SwiperSlide key={product.id}>
               <Link
                 href={`/${product.id}`}
-                className="block  border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow "
+                className="block border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
               >
                 <img
                   src={product.img}

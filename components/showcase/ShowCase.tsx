@@ -1,13 +1,14 @@
+"use client";
+
 import { Star } from "lucide-react";
 import React from "react";
+import Image from "next/image";
 
 const ShowCase = () => {
   return (
     <div className="flex flex-col w-full min-h-screen font-sans">
-      {/* Main banner section */}
       <section className="relative w-full bg-gray-100 overflow-hidden">
         <div className="container mx-auto px-4 py-8 md:py-16 flex flex-col md:flex-row items-center">
-          {/* Left content */}
           <div className="w-full md:w-1/2 z-10 mb-8 md:mb-0">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight mb-4 max-[350px]:text-[30px]">
               FIND CLOTHES
@@ -25,7 +26,6 @@ const ShowCase = () => {
               Shop Now
             </button>
             
-            {/* Stats */}
             <div className="flex flex-wrap mt-8 gap-6 md:gap-12">
               <div className="flex flex-col">
                 <span className="text-2xl md:text-3xl font-bold">200+</span>
@@ -57,12 +57,20 @@ const ShowCase = () => {
             </div>
             
             <div className="relative h-64 sm:h-80 md:h-96 w-full">
-              <img
+              <Image
                 src="https://i.postimg.cc/fbbZ4dSP/Rectangle-2.png"
                 alt="Fashion models wearing stylish clothing"
+                width={800}
+                height={600}
                 className="w-full h-full object-cover max-[350px]:hidden"
               />
-              <img src="./Showcase.png" alt="showcase" className="hidden max-[350px]:block" />
+              <Image 
+                src="/Showcase.png" 
+                alt="showcase" 
+                width={350}
+                height={300}
+                className="hidden max-[350px]:block" 
+              />
             </div>
           </div>
         </div>
