@@ -29,7 +29,7 @@ const Cards = () => {
         setProducts(response.data || []);
         setLoading(false);
         showSuccessToast("Malumotlar muvafaqiyatli keldi!");
-      } catch (error: Error) {
+      } catch (error: Error|any) {
         showErrorToast(error?.message || "Malumotlar yuklanishda xatolik");
         setError(error);
         setLoading(false);
