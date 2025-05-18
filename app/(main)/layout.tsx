@@ -3,6 +3,7 @@ import "../globals.css";
 import Header from "@/components/header/Header";
 import { ToastProvider } from "@/providers/ToastProvider";
 import { integralCF, satoshi } from "@/font/Font";
+import Footer from "@/components/footer/Footer";
 
 export const metadata: Metadata = {
   title: "Shop App",
@@ -24,6 +25,7 @@ export default function RootLayout({
         <ToastProvider />
         <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );

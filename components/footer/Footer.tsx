@@ -6,7 +6,6 @@ import {
   TwitterOutlined,
 } from "@ant-design/icons";
 
-import Visa from "@/public/visa.svg";
 import { integralCF } from "@/font/Font";
 const Footer: React.FC = () => {
   return (
@@ -14,10 +13,12 @@ const Footer: React.FC = () => {
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           <div className="col-span-1 lg:col-span-1">
-            <h2 className={`${integralCF.className}  text-2xl font-bold mb-4`}>SHOP.CO</h2>
+            <h2 className={`${integralCF.className}  text-2xl font-bold mb-4`}>
+              SHOP.CO
+            </h2>
             <p className="text-sm text-gray-600 mb-6">
-              We have clothes that suits your style and which you're proud to
-              wear. From women to men.
+              We have clothes that suits your style and which you&apos;re proud
+              to wear. From women to men.
             </p>
             <div className="flex space-x-4">
               <a

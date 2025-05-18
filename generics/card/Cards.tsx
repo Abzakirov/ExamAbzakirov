@@ -27,10 +27,9 @@ const Cards = () => {
         setLoading(true);
         const response = await axiosInstance.get("/Zustand");
         setProducts(response.data || []);
-        console.log(response.data);
         setLoading(false);
         showSuccessToast("Malumotlar muvafaqiyatli keldi!");
-      } catch (error: any) {
+      } catch (error: Error) {
         showErrorToast(error?.message || "Malumotlar yuklanishda xatolik");
         setError(error);
         setLoading(false);
@@ -56,35 +55,52 @@ const Cards = () => {
           breakpoints={{
             200: {
               slidesPerView: 1,
-              spaceBetween: 10
+              spaceBetween: 10,
             },
             640: {
               slidesPerView: 2,
-              spaceBetween: 10
+              spaceBetween: 10,
             },
             768: {
               slidesPerView: 3,
-              spaceBetween: 10
+              spaceBetween: 10,
             },
             1024: {
               slidesPerView: 4,
-              spaceBetween: 10
-            }
+              spaceBetween: 10,
+            },
           }}
         >
           {products.slice(0, 12).map((product: ProductType) => (
             <SwiperSlide key={product.id}>
-              <Link href={`/${product.id}`} className="block border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow ">
+              <Link
+                href={`/${product.id}`}
+                className="block  border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow "
+              >
                 <img
                   src={product.img}
                   alt={product.name}
-                  className="w-full object-cover object-center rounded-md"
+                  className="w-full object-cover !h-[250px] object-center rounded-md"
                 />
-                <h2 className="font-medium text-lg mt-2 truncate">{product.name}</h2>
+                <h2 className="font-medium text-lg mt-2 truncate">
+                  {product.name}
+                </h2>
                 <Rates />
-                <p className="text-lg font-semibold text-blue-600 mt-1">
-                  {product.price}
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="text-lg font-semibold text-black mt-1">
+                    ${product.price}
+                  </p>
+                  <p className="text-lg font-semibold text-gray-300 mt-1">
+                    ${product.currentPrice}
+                  </p>
+
+                  <p
+                    style={{ backgroundColor: "rgba(255, 51, 51, 0.10)" }}
+                    className="text-[#F33] text-sm font-semibold px-2 py-1 rounded-md mt-1"
+                  >
+                    {product.discount}%
+                  </p>
+                </div>
               </Link>
             </SwiperSlide>
           ))}
