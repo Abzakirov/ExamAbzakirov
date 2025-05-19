@@ -38,10 +38,12 @@ const Cards = () => {
     fetchProducts();
   }, []);
 
-  if (loading) return   {Array(4).fill().map((_, index:number) => (
-    <SkeletonCard key={index} />
-  ))};
-
+  if (loading)
+    return (
+      <>
+        <SkeletonCard />
+      </>
+    );
   return (
     <div className="container2 mx-auto px-4 mt-7">
       <div>

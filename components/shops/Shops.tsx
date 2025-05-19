@@ -1,4 +1,5 @@
 "use client";
+
 import { ProductType, RootState } from "@/@types";
 import { integralCF } from "@/font/Font";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
@@ -11,11 +12,45 @@ import {
 } from "@/store/productSlice/ProductSlice";
 import { useDispatch, useSelector } from "react-redux";
 import EmptyCart from "@/generics/empty";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+interface PromoCode {
+  kode: string;
+  id: string;
+}
 
 const Shops = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.products.items);
+  const [promoCode, setPromoCode] = useState("");
+  const [validPromo, setValidPromo] = useState(false);
+  const [promoDiscount, setPromoDiscount] = useState(0);
+  const [promoMessage, setPromoMessage] = useState("");
+  const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
+  const [_isLoading, setIsLoading] = useState(true);
+  const [_errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  useEffect(() => {
+    const fetchCodes = async () => {
+      try {
+        const res = await axios.get(
+          "https://682a0a2aab2b5004cb35a141.mockapi.io/kod"
+        );
+        const data = res.data;
+        setPromoCodes(data);
+        setIsLoading(false);
+      } catch (error) {
+        setErrorMessage("Failed to load promo code data");
+        setIsLoading(false);
+        console.error("Error fetching promo codes:", error);
+      }
+    };
+
+    fetchCodes();
+  }, []);
+  console.debug(_isLoading, _errorMessage);
   const handleRemoveItem = (productId: string) => {
     dispatch(removeProduct(productId));
   };
@@ -52,13 +87,48 @@ const Shops = () => {
     }, 0);
   };
 
+  const applyPromoCode = () => {
+    const foundPromo = promoCodes.find((code) => code.kode === promoCode);
+
+    if (foundPromo) {
+      let discount = 0;
+
+      switch (foundPromo.id) {
+        case "1":
+          discount = 10;
+          break;
+        case "2":
+          discount = 15;
+          break;
+        case "3":
+          discount = 25;
+          break;
+        default:
+          discount = 5;
+      }
+
+      setValidPromo(true);
+      setPromoDiscount(discount);
+      setPromoMessage(`Промокод применен! Скидка ${discount}%`);
+    } else {
+      setValidPromo(false);
+      setPromoDiscount(0);
+      setPromoMessage("Неверный промокод");
+    }
+  };
+
   const subtotal = calculateSubtotal();
-  const discount = subtotal * 0.2;
+  const baseDiscount = subtotal * 0.2;
+  const additionalDiscount = validPromo ? subtotal * (promoDiscount / 100) : 0;
+  const totalDiscount = baseDiscount + additionalDiscount;
   const deliveryFee = 15;
-  const total = subtotal - discount + deliveryFee;
+  const total = subtotal - totalDiscount + deliveryFee;
 
   if (cartItems.length === 0) return <EmptyCart />;
-
+const router =useRouter()
+const handleCheckout = () => {
+  router.push('/checkout')
+}
   return (
     <div className="container2 mt-4 px-2">
       <div>
@@ -169,15 +239,25 @@ const Shops = () => {
                 <h2 className="text-[#000] text-[16px] sm:text-[20px] font-extrabold">
                   ${subtotal.toFixed(2)}
                 </h2>
-              </div>{" "}
+              </div>
               <div className="flex items-center justify-between">
                 <h4 className="text-rgba(0, 0, 0, 0.60) text-[16px] sm:text-[20px]">
                   Discount (-20%):
                 </h4>
                 <h2 className="text-[red] text-[16px] sm:text-[20px] font-extrabold">
-                  -${discount.toFixed(2)}
+                  -${baseDiscount.toFixed(2)}
                 </h2>
-              </div>{" "}
+              </div>
+              {validPromo && (
+                <div className="flex items-center justify-between">
+                  <h4 className="text-rgba(0, 0, 0, 0.60) text-[16px] sm:text-[20px]">
+                    Promo Discount (-{promoDiscount}%):
+                  </h4>
+                  <h2 className="text-[red] text-[16px] sm:text-[20px] font-extrabold">
+                    -${additionalDiscount.toFixed(2)}
+                  </h2>
+                </div>
+              )}
               <div className="flex items-center justify-between">
                 <h4 className="text-rgba(0, 0, 0, 0.60) text-[16px] sm:text-[20px]">
                   Delivery Fee:
@@ -197,7 +277,7 @@ const Shops = () => {
             </div>
             <div>
               <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
-                <form className="flex items-center gap-2 sm:gap-4 h-[40px] sm:h-[48px] rounded-[62px] w-full md:w-[330px] bg-[#F0F0F0] p-2">
+                <div className="flex items-center gap-2 sm:gap-4 h-[40px] sm:h-[48px] rounded-[62px] w-full md:w-[330px] bg-[#F0F0F0] p-2">
                   <Image
                     src="/del.svg"
                     alt="w"
@@ -209,13 +289,28 @@ const Shops = () => {
                     type="text"
                     placeholder="Add promo code"
                     className="w-full h-full outline-none font-medium bg-transparent text-[14px] sm:text-[16px]"
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value)}
                   />
-                </form>
-                <Button className="!text-[#fff] !rounded-full !bg-[#000] !p-[12px] sm:!p-[16px] !w-[100px] sm:!w-[119px] !h-[40px] sm:!h-[48px] !text-[14px] sm:!text-[16px]">
+                </div>
+                <Button
+                  className="!text-[#fff] !rounded-full !bg-[#000] !p-[12px] sm:!p-[16px] !w-[100px] sm:!w-[119px] !h-[40px] sm:!h-[48px] !text-[14px] sm:!text-[16px]"
+                  onClick={applyPromoCode}
+                >
                   Apply
                 </Button>
               </div>
+              {promoMessage && (
+                <p
+                  className={`text-${
+                    validPromo ? "green-500" : "red-500"
+                  } text-[14px] mt-2 text-center`}
+                >
+                  {promoMessage}
+                </p>
+              )}
               <Button
+                onClick={handleCheckout}
                 type="text"
                 className="!w-full md:!w-[457px] !h-[50px] sm:!h-[40px] !bg-[#000] !max-[320px]:h-[30px] !text-white flex items-center justify-center gap-2 mt-4 !rounded-full !text-[14px] sm:!text-[16px]"
               >

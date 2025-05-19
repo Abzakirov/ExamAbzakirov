@@ -11,6 +11,7 @@ import { toggleLike, selectLikedProducts } from "@/store/likeSlice/LikeSlice";
 import Cards from "@/generics/card/Cards";
 import Image from "next/image";
 
+
 const ProductInfoComponent = ({ product }: { product: ProductInfoType }) => {
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(
@@ -31,6 +32,7 @@ const ProductInfoComponent = ({ product }: { product: ProductInfoType }) => {
   const decreaseQuantity = () => {
     if (quantity > 1) setQuantity(quantity - 1);
   };
+
 
   useEffect(() => {
     const fetchCustomers = async () => {
