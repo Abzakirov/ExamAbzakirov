@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 import EmptyCart from "@/generics/empty";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface PromoCode {

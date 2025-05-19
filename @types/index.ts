@@ -23,6 +23,12 @@ export interface ProductType {
     selectedSize: string;
     selectedColor: string;
 }
+export interface UserTypes{
+    firstname: string;
+    lastname: string;
+    email: string;
+    phonenumber: string;
+}
 
 export interface ProductInfoType {
     id: string;
