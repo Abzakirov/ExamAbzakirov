@@ -12,7 +12,7 @@ const Buttons = () => {
 
   return (
     <div>
-      <button className="!hidden max-[350px]:!block" onClick={handleMenuClick}>
+      <button className="!hidden max-[420px]:!block" onClick={handleMenuClick}>
         <MenuIcon size={24} />
       </button>
       <Drawers open={open} setOpen={setOpen} />

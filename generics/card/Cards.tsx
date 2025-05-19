@@ -14,6 +14,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { ProductType } from "@/@types";
 import ImageTitleSkeleton from "../sceletton/Sceletton";
+import SkeletonCard from "../sceletton/Sceletton";
 
 const Cards = () => {
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -37,7 +38,9 @@ const Cards = () => {
     fetchProducts();
   }, []);
 
-  if (loading) return <ImageTitleSkeleton />;
+  if (loading) return   {Array(4).fill().map((_, index:number) => (
+    <SkeletonCard key={index} />
+  ))};
 
   return (
     <div className="container2 mx-auto px-4 mt-7">
