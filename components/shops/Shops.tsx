@@ -15,6 +15,7 @@ import EmptyCart from "@/generics/empty";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface PromoCode {
   kode: string;
@@ -125,10 +126,6 @@ const Shops = () => {
   const total = subtotal - totalDiscount + deliveryFee;
 
   if (cartItems.length === 0) return <EmptyCart />;
-const router =useRouter()
-const handleCheckout = () => {
-  router.push('/checkout')
-}
   return (
     <div className="container2 mt-4 px-2">
       <div>
@@ -309,14 +306,13 @@ const handleCheckout = () => {
                   {promoMessage}
                 </p>
               )}
-              <Button
-                onClick={handleCheckout}
+              <Link href={"/checkout"}
                 type="text"
                 className="!w-full md:!w-[457px] !h-[50px] sm:!h-[40px] !bg-[#000] !max-[320px]:h-[30px] !text-white flex items-center justify-center gap-2 mt-4 !rounded-full !text-[14px] sm:!text-[16px]"
               >
                 Go to Checkout{" "}
                 <ArrowRight size={16} className="sm:w-5 sm:h-5" />
-              </Button>
+              </Link>
             </div>
           </div>
         </div>

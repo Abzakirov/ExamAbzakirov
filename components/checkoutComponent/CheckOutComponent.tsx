@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Form,
@@ -6,32 +7,27 @@ import {
   Row,
   Col,
   Card,
-  Typography,
   Divider,
-  Space,
 } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
-
-const { Title, Text } = Typography;
 
 const CheckOutComponent = () => {
   return (
-    <div className="bg-blue-50/30 bg-[repeating-linear-gradient(45deg,transparent,transparent_4px,rgba(173,216,230,0.1)_4px,rgba(173,216,230,0.1)_8px)] p-1 min-h-screen">
+    <div >
       <div className="bg-white mx-auto max-w-5xl">
         <div className="border-b border-blue-100 py-3">
-          <Title level={2} className="text-center m-0">
+          <h2 className="text-center m-0">
             Check Out
-          </Title>
+          </h2>
         </div>
 
         <div className="p-4">
           <Row gutter={[32, 24]}>
             <Col xs={24} lg={16}>
-              <Card bordered={false} className="shadow-sm">
+              <Card className="shadow-sm">
                 <div className="mb-6">
-                  <Text strong className="text-gray-600 uppercase text-sm">
-                    Contact Infomation
-                  </Text>
+                  <p className="font-bold text-gray-600 uppercase text-sm">
+                    Contact Information
+                  </p>
 
                   <Form layout="vertical" className="mt-4">
                     <Row gutter={16}>
@@ -99,55 +95,54 @@ const CheckOutComponent = () => {
               </Card>
 
               <Button
-                type="primary"
                 size="large"
                 block
-                className="bg-black hover:bg-black/80 mt-4 h-12"
+                className="!bg-black !text-white !hover:bg-black/80 mt-4 h-12"
               >
                 Place Order
               </Button>
             </Col>
 
             <Col xs={24} lg={8}>
-              <Card className="bg-white shadow-sm" bordered={false}>
-                <Title level={4} className="mb-4">
+              <Card className="bg-white shadow-sm">
+                <h4 className="mb-4">
                   Order summary
-                </Title>
+                </h4>
 
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center">
                     <div className="flex items-center justify-center bg-gray-100 w-6 h-6 mr-2 rounded">
                       ⊗
                     </div>
-                    <Text>JenkateMW</Text>
+                    <p>JenkateMW</p>
                   </div>
                   <div>
-                    <Text className="text-green-500 mr-1">-$25.00</Text>
-                    <Text className="text-green-500">[Remove]</Text>
+                    <p className="text-green-500 mr-1 inline">-$25.00</p>
+                    <p className="text-green-500 inline">[Remove]</p>
                   </div>
                 </div>
 
                 <div className="border-t border-gray-200 pt-4 pb-2">
                   <div className="flex justify-between mb-2">
-                    <Text>Shipping</Text>
-                    <Text strong>Free</Text>
+                    <p>Shipping</p>
+                    <p className="font-bold">Free</p>
                   </div>
 
                   <div className="flex justify-between mb-2">
-                    <Text>Subtotal</Text>
-                    <Text strong>$99.00</Text>
+                    <p>Subtotal</p>
+                    <p className="font-bold">$259.00</p>
                   </div>
                 </div>
 
                 <Divider className="my-2" />
 
                 <div className="flex justify-between">
-                  <Text strong className="text-lg">
+                  <p className="font-bold text-lg">
                     Total
-                  </Text>
-                  <Text strong className="text-lg">
+                  </p>
+                  <p className="font-bold text-lg">
                     $234.00
-                  </Text>
+                  </p>
                 </div>
               </Card>
             </Col>
