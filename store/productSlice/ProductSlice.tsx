@@ -1,7 +1,6 @@
 import { showSuccessToast } from "@/generics/toast/Toast";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// Types
 export interface ProductType {
   id: string;
   name: string;

@@ -64,7 +64,6 @@ export const satoshi = localFont({
       weight: "900", 
       style: "normal" 
     },
-    // Italic variants
     { 
       path: "../public/fonts/Satoshi-LightItalic.woff2", 
       weight: "300", 

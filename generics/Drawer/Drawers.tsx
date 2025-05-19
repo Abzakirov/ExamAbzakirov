@@ -16,10 +16,9 @@ const Drawers = ({ open, setOpen }: DrawerProps) => {
   };
   const router = useRouter();
 
-  // Handle navigation and close the drawer
   const handleNavigation = (path: string) => {
     router.push(path);
-    onClose(); // Close the drawer when navigating
+    onClose(); 
   };
 
   return (
